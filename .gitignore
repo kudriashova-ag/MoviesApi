@@ -5,6 +5,7 @@
 
 bin/
 obj/
+readme.md
 
 
 # dotenv files
