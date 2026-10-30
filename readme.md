@@ -16,5 +16,7 @@ dotnet new gitignore
 Після завантаження проєкту з git
 dotnet build
 
-
+Swagger:
+dotnet remove package Microsoft.AspNetCore.OpenApi
+dotnet add package Swashbuckle.AspNetCore --version 10.3.1
 
