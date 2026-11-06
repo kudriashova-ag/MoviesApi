@@ -16,7 +16,19 @@ public class InMemoryMovieService : IMovieService
         new() { Id = 5, Title = "Interstellar", ReleaseYear = 2014, Genre = "Фантастика", Rating = 8.7, CreatedAtUtc = DateTime.UtcNow }
     ];
 
-    public IReadOnlyList<MovieDto> GetAll() => Movies.Select(m => m.ToDto()).ToList();
-    
+    public IReadOnlyList<MovieDto> GetAll(string? genre)
+    {
+        if(!string.IsNullOrWhiteSpace(genre))
+        {
+            return Movies.Where(m => m.Genre.Equals(genre.Trim(), StringComparison.OrdinalIgnoreCase))
+                .Select(m => m.ToDto()).ToList();
+        }
+        return Movies.Select(m => m.ToDto()).ToList();
+    }
+
+
     public MovieDto? GetById(int id) => Movies.FirstOrDefault(m => m.Id == id)?.ToDto();
+
+
+    
 }

@@ -7,6 +7,6 @@ namespace MoviesApi.Application.Movies;
 public static class MovieMappings
 {
     public static MovieDto ToDto(this Movie movie) =>
-        new MovieDto(movie.Id, movie.Title, movie.ReleaseYear, movie.Genre, movie.Rating);
+        new MovieDto(movie.Id, movie.Title, movie.ReleaseYear, movie.Genre, movie.Rating );
 
 }

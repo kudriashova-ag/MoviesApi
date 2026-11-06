@@ -6,6 +6,14 @@ namespace MoviesApi.Controllers;
 [Route("")]
 public class PingController : ControllerBase
 {
+    private readonly IWebHostEnvironment _env;
+
+    public PingController(IWebHostEnvironment env)
+    {
+        _env = env;
+    }
+
+
     [HttpGet]
     public string Get()
     {
@@ -13,9 +21,13 @@ public class PingController : ControllerBase
     }
 
     [HttpGet("ping")]
-    public string Ping()
+    public IActionResult Ping()
     {
-        return "pong";
+        return Ok(new
+        {
+            message = "MoviesApi is running",
+            environment = _env.EnvironmentName
+        });
     }
 
 

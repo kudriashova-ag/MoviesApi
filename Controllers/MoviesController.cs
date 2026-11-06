@@ -16,22 +16,30 @@ public class MoviesController : ControllerBase
     }
 
 
-    [HttpGet]
-    public ActionResult<IReadOnlyList<MovieDto>> GetAll()
+    [HttpGet] // GET  api/movies?genre=Фантастика
+    public ActionResult<IReadOnlyList<MovieDto>> GetAll([FromQuery] string? genre)
     {
-        var movies = _movieService.GetAll();
+        var movies = _movieService.GetAll(genre);
         return Ok(movies);
     }
 
 
-    [HttpGet("{id:int}")]
-    public ActionResult<MovieDto> GetById(int id)
+    [HttpGet("{id:int:min(1)}")]  // GET  api/movies/1
+    public ActionResult<MovieDto> GetById([FromRoute] int id)
     {
         var movie = _movieService.GetById(id);
-        if(movie is null)
+        if (movie is null)
         {
             return NotFound();
         }
         return Ok(movie);
     }
+
+
+    [HttpPost]  // POST  api/movies
+    public ActionResult Create([FromBody] CreateMovieDto dto)
+    {
+        return Ok("OK");
+    }
+    
 }

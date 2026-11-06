@@ -7,6 +7,11 @@ dotnet run
 dotnet watch run
 
 
+Створення solution
+dotnet new sln -n MoviesApi
+dotnet sln add MoviesApi/MoviesApi.csproj
+тоді запуск проєкта:
+dotnet watch --project MoviesApi
 
 
 
