@@ -8,4 +8,8 @@ public interface IMovieService
     IReadOnlyList<MovieDto> GetAll(string? genre);
 
     MovieDto? GetById(int id);
+
+    MovieDto Create(CreateMovieDto dto);
+
+    bool Delete(int id);
 }

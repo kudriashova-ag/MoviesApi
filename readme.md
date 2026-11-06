@@ -5,6 +5,8 @@ MoviesApi - назва проєкту
 Запуск проєкту:
 dotnet run
 dotnet watch run
+Якщо запуск з Solution:
+dotnet watch --project MoviesApi
 
 
 Створення solution

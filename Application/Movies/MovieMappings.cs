@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Components.Web;
 using MoviesApi.Application.Movies.Dtos;
 using MoviesApi.Domain.Movies;
 
@@ -6,7 +7,16 @@ namespace MoviesApi.Application.Movies;
 
 public static class MovieMappings
 {
+    // Movie -> MovieDto
     public static MovieDto ToDto(this Movie movie) =>
-        new MovieDto(movie.Id, movie.Title, movie.ReleaseYear, movie.Genre, movie.Rating );
+        new MovieDto(movie.Id, movie.Title, movie.ReleaseYear, movie.Genre, movie.Rating);
 
+    // CreateMovieDto -> нова сутність
+    public static Movie ToEntity(this CreateMovieDto dto) => new()
+    {
+        Title = dto.Title.Trim(),
+        ReleaseYear = dto.ReleaseYear,
+        Genre = dto.Genre.Trim(),
+        Rating = dto.Rating
+    };
 }

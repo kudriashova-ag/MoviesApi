@@ -8,6 +8,9 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddRouting(options => options.LowercaseUrls = true);
+
+
 builder.Services.AddSingleton<IMovieService, InMemoryMovieService>();
 
 
@@ -50,5 +53,7 @@ app.Use(async (context, next) =>
 
 
 app.MapControllers();
+
+
 
 app.Run();

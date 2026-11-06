@@ -6,7 +6,8 @@ namespace MoviesApi.Infrastructure;
 
 public class InMemoryMovieService : IMovieService
 {
-
+    private static readonly Lock Sync = new();
+    
     private static readonly List<Movie> Movies =
     [
         new() { Id = 1, Title = "Тіні забутих предків", ReleaseYear = 1965, Genre = "Драма", Rating = 8.0, CreatedAtUtc = DateTime.UtcNow },
@@ -30,5 +31,24 @@ public class InMemoryMovieService : IMovieService
     public MovieDto? GetById(int id) => Movies.FirstOrDefault(m => m.Id == id)?.ToDto();
 
 
-    
+    public MovieDto Create(CreateMovieDto dto)
+    {
+        lock (Sync) // використовувати, поки не  перейшли на БД
+        {
+            var movie = dto.ToEntity();
+            movie.Id = Movies.Count == 0 ? 1 : Movies.Max(m => m.Id) + 1;
+            movie.CreatedAtUtc = DateTime.UtcNow;
+
+            Movies.Add(movie);
+            return movie.ToDto();
+        }
+    }
+
+    public bool Delete(int id)
+    {
+        lock (Sync)
+        {
+            return Movies.RemoveAll(m => m.Id == id) > 0;
+        }
+    }
 }

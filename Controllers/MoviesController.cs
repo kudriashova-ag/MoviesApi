@@ -37,9 +37,29 @@ public class MoviesController : ControllerBase
 
 
     [HttpPost]  // POST  api/movies
-    public ActionResult Create([FromBody] CreateMovieDto dto)
+    public ActionResult<MovieDto> Create([FromBody] CreateMovieDto dto)
     {
-        return Ok("OK");
+        var created = _movieService.Create(dto); // created = новий фільм в MovieDto
+        return CreatedAtAction(nameof(GetById), new { id = created.Id }, created);
     }
-    
+
+    // DELETE api/movies/1
+    [HttpDelete("{id:int:min(1)}")]
+    public ActionResult Delete([FromRoute] int id)
+    {
+        var deleted = _movieService.Delete(id);
+        if (!deleted)
+        {
+            return NotFound();
+        }
+        return NoContent();
+    }
+
+    // PUT api/movies/1
+    [HttpPut("{id:int:min(1)}")]
+    public ActionResult Update([FromRoute] int id, [FromBody] UpdateMovieDto dto)
+    {
+        return NoContent();
+    }
+
 }
