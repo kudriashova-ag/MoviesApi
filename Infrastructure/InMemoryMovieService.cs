@@ -51,4 +51,20 @@ public class InMemoryMovieService : IMovieService
             return Movies.RemoveAll(m => m.Id == id) > 0;
         }
     }
+
+    public bool Update(int id, UpdateMovieDto dto)
+    {
+        lock (Sync)
+        {
+            var movie = Movies.FirstOrDefault(m => m.Id == id);
+            if (movie is null)
+            {
+                return false;
+            }
+
+            dto.ApplyTo(movie);
+            return true;
+        }
+    }
+
 }

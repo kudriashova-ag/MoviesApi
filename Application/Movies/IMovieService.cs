@@ -12,4 +12,6 @@ public interface IMovieService
     MovieDto Create(CreateMovieDto dto);
 
     bool Delete(int id);
+
+    bool Update(int id, UpdateMovieDto dto);
 }

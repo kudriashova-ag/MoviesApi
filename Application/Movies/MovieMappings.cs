@@ -19,4 +19,13 @@ public static class MovieMappings
         Genre = dto.Genre.Trim(),
         Rating = dto.Rating
     };
+
+    public static void ApplyTo(this UpdateMovieDto dto, Movie movie)
+    {
+        movie.Title = dto.Title.Trim();
+        movie.ReleaseYear = dto.ReleaseYear;
+        movie.Genre = dto.Genre.Trim();
+        movie.Rating = dto.Rating;
+    }
+
 }

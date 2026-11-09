@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using System.Reflection;
 using MoviesApi.Application.Movies;
 using MoviesApi.Infrastructure;
 
@@ -6,8 +7,33 @@ var builder = WebApplication.CreateBuilder(args);
 
 // впровадження залежностей DI (dependency injection)
 builder.Services.AddControllers();
-builder.Services.AddSwaggerGen();
 
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen(options =>
+{
+    options.SwaggerDoc("v1", new()
+    {
+        Title = "Movies API",
+        Version = "v1",
+        Description = "Навчальний API для роботи з фільмами"
+    });
+
+    options.SwaggerDoc("v2", new()
+    {
+        Title = "Movies API",
+        Version = "v2",
+        Description = "Друга версія API для роботи з фільмами"
+    });
+
+     // документ містить усі ендпоинти своєї групи
+    options.DocInclusionPredicate((docName, apiDesc) => 
+        apiDesc.GroupName == docName || apiDesc.GroupName == null
+    );
+
+
+    var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+    options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFile));
+});
 builder.Services.AddRouting(options => options.LowercaseUrls = true);
 
 
@@ -22,7 +48,11 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
-    app.UseSwaggerUI();
+    app.UseSwaggerUI(options =>
+    {
+        options.SwaggerEndpoint("/swagger/v1/swagger.json", "v1");
+        options.SwaggerEndpoint("/swagger/v2/swagger.json", "v2");
+    });
 }
 
 app.UseHttpsRedirection();
