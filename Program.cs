@@ -1,5 +1,6 @@
 using System.Diagnostics;
 using System.Reflection;
+using AutoMapper;
 using MoviesApi.Application.Movies;
 using MoviesApi.Infrastructure;
 
@@ -36,6 +37,8 @@ builder.Services.AddSwaggerGen(options =>
 });
 builder.Services.AddRouting(options => options.LowercaseUrls = true);
 
+// Реєструємо AutoMapper
+builder.Services.AddAutoMapper(typeof(MovieProfile));
 
 builder.Services.AddSingleton<IMovieService, InMemoryMovieService>();
 
@@ -47,6 +50,9 @@ var app = builder.Build();
 // конвеєр обробки запитів (middleware pipeline)
 if (app.Environment.IsDevelopment())
 {
+    // перевіряємо маппінги на помилки
+    app.Services.GetRequiredService<IMapper>().ConfigurationProvider.AssertConfigurationIsValid();
+
     app.UseSwagger();
     app.UseSwaggerUI(options =>
     {

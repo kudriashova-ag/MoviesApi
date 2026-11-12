@@ -1,3 +1,4 @@
+using AutoMapper;
 using MoviesApi.Application.Movies;
 using MoviesApi.Application.Movies.Dtos;
 using MoviesApi.Domain.Movies;
@@ -7,6 +8,13 @@ namespace MoviesApi.Infrastructure;
 public class InMemoryMovieService : IMovieService
 {
     private static readonly Lock Sync = new();
+
+    private readonly IMapper _mapper;
+
+    public InMemoryMovieService(IMapper mapper)
+    {
+        _mapper = mapper;
+    }
     
     private static readonly List<Movie> Movies =
     [
@@ -22,25 +30,29 @@ public class InMemoryMovieService : IMovieService
         if(!string.IsNullOrWhiteSpace(genre))
         {
             return Movies.Where(m => m.Genre.Equals(genre.Trim(), StringComparison.OrdinalIgnoreCase))
-                .Select(m => m.ToDto()).ToList();
+                .Select(m => _mapper.Map<MovieDto>(m)).ToList();
         }
-        return Movies.Select(m => m.ToDto()).ToList();
+        return Movies.Select(m => _mapper.Map<MovieDto>(m)).ToList();
     }
 
 
-    public MovieDto? GetById(int id) => Movies.FirstOrDefault(m => m.Id == id)?.ToDto();
+    public MovieDto? GetById(int id) {
+        var movie = Movies.FirstOrDefault(m => m.Id == id);
+        return movie is null ? null : _mapper.Map<MovieDto>(movie);
+    }
+
 
 
     public MovieDto Create(CreateMovieDto dto)
     {
         lock (Sync) // використовувати, поки не  перейшли на БД
         {
-            var movie = dto.ToEntity();
+            var movie = _mapper.Map<Movie>(dto);
             movie.Id = Movies.Count == 0 ? 1 : Movies.Max(m => m.Id) + 1;
             movie.CreatedAtUtc = DateTime.UtcNow;
 
             Movies.Add(movie);
-            return movie.ToDto();
+            return _mapper.Map<MovieDto>(movie);
         }
     }
 
@@ -52,6 +64,8 @@ public class InMemoryMovieService : IMovieService
         }
     }
 
+
+
     public bool Update(int id, UpdateMovieDto dto)
     {
         lock (Sync)
@@ -62,7 +76,7 @@ public class InMemoryMovieService : IMovieService
                 return false;
             }
 
-            dto.ApplyTo(movie);
+            _mapper.Map(dto, movie);
             return true;
         }
     }
