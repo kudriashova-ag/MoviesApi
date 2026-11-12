@@ -18,10 +18,12 @@ public class MovieProfile : Profile
 
         // CreateMovieDto -> Movie
         CreateMap<CreateMovieDto, Movie>()
-            .ForMember(d => d.Id, o => o.Ignore());
+            .ForMember(d => d.Id, o => o.Ignore())
+            .ForMember(d => d.CreatedAtUtc, o => o.Ignore());
         
         // UpdateMovieDto -> Movie
         CreateMap<UpdateMovieDto, Movie>()
-            .ForMember(d => d.Id, o => o.Ignore());
+            .ForMember(d => d.Id, o => o.Ignore())
+            .ForMember(d => d.CreatedAtUtc, o => o.Ignore());
     }
 }
