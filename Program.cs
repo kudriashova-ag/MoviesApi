@@ -3,6 +3,8 @@ using System.Reflection;
 using AutoMapper;
 using MoviesApi.Application.Movies;
 using MoviesApi.Infrastructure;
+using Microsoft.EntityFrameworkCore;
+using MoviesApi.Infrastructure.Persistence;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -39,6 +41,13 @@ builder.Services.AddRouting(options => options.LowercaseUrls = true);
 
 // Реєструємо AutoMapper
 builder.Services.AddAutoMapper(typeof(MovieProfile));
+
+// підключення до БД
+var connectionString = builder.Configuration.GetConnectionString("MoviesDb")
+    ?? throw new InvalidOperationException("Не знайдено рядок підключення 'MoviesDb' в appsettings.json.");
+builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlServer(connectionString));
+
+
 
 builder.Services.AddSingleton<IMovieService, InMemoryMovieService>();
 

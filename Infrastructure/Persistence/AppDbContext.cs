@@ -14,5 +14,11 @@ public class AppDbContext : DbContext
     // DbSet = таблиця Movies, в якій будут Movie
     // тепер можемо писати: _db.Movies.Where(...) в сервісі
     public DbSet<Movie> Movies => Set<Movie>();
+
+    // Підключає клас конфігурацій до EF Core
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        modelBuilder.ApplyConfigurationsFromAssembly(typeof(AppDbContext).Assembly);
+    }
     
 }
