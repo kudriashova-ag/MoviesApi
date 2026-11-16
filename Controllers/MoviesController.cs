@@ -24,9 +24,9 @@ public class MoviesController : ControllerBase
     /// <returns> Масив фільмів </returns>
     [HttpGet]
     [ProducesResponseType(typeof(IReadOnlyList<MovieDto>), StatusCodes.Status200OK)]
-    public ActionResult<IReadOnlyList<MovieDto>> GetAll([FromQuery] string? genre)
+    public async Task<ActionResult<IReadOnlyList<MovieDto>>> GetAll([FromQuery] string? genre)
     {
-        var movies = _movieService.GetAll(genre);
+        var movies = await _movieService.GetAllAsync(genre);
         return Ok(movies);
     }
 
@@ -38,9 +38,9 @@ public class MoviesController : ControllerBase
     [HttpGet("{id:int:min(1)}")]
     [ProducesResponseType(typeof(MovieDto), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public ActionResult<MovieDto> GetById([FromRoute] int id)
+    public async Task<ActionResult<MovieDto>> GetById([FromRoute] int id)
     {
-        var movie = _movieService.GetById(id);
+        var movie = await _movieService.GetByIdAsync(id);
         if (movie is null)
         {
             return NotFound();
@@ -55,9 +55,9 @@ public class MoviesController : ControllerBase
     /// <returns>Створений фільм і адреса, за якою його можна знайти</returns>
     [HttpPost]
     [ProducesResponseType(typeof(MovieDto), StatusCodes.Status201Created)]
-    public ActionResult<MovieDto> Create([FromBody] CreateMovieDto dto)
+    public async Task<ActionResult<MovieDto>> Create([FromBody] CreateMovieDto dto)
     {
-        var created = _movieService.Create(dto); // created = новий фільм в MovieDto
+        var created = await _movieService.CreateAsync(dto); // created = новий фільм в MovieDto
         return CreatedAtAction(nameof(GetById), new { id = created.Id }, created);
     }
 
@@ -69,9 +69,9 @@ public class MoviesController : ControllerBase
     [HttpDelete("{id:int:min(1)}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public ActionResult Delete([FromRoute] int id)
+    public async Task<ActionResult> Delete([FromRoute] int id)
     {
-        var deleted = _movieService.Delete(id);
+        var deleted = await _movieService.DeleteAsync(id);
         if (!deleted)
         {
             return NotFound();
@@ -88,9 +88,9 @@ public class MoviesController : ControllerBase
     [HttpPut("{id:int:min(1)}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public ActionResult Update([FromRoute] int id, [FromBody] UpdateMovieDto dto)
+    public async Task<ActionResult> Update([FromRoute] int id, [FromBody] UpdateMovieDto dto)
     {
-        var updated = _movieService.Update(id, dto);
+        var updated = await _movieService.UpdateAsync(id, dto);
         if (!updated)
         {
             return NotFound();

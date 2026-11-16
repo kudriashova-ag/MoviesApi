@@ -5,13 +5,13 @@ namespace MoviesApi.Application.Movies;
 //  Описує ЩО вміє робити програма з фільмами, але не ЯК
 public interface IMovieService
 {
-    IReadOnlyList<MovieDto> GetAll(string? genre);
+    Task<IReadOnlyList<MovieDto>> GetAllAsync(string? genre);
 
-    MovieDto? GetById(int id);
+    Task<MovieDto?> GetByIdAsync(int id);
 
-    MovieDto Create(CreateMovieDto dto);
+    Task<MovieDto> CreateAsync(CreateMovieDto dto);
 
-    bool Delete(int id);
+    Task<bool> DeleteAsync(int id);
 
-    bool Update(int id, UpdateMovieDto dto);
+    Task<bool> UpdateAsync(int id, UpdateMovieDto dto);
 }

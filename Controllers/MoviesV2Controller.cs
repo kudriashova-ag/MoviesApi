@@ -23,9 +23,9 @@ public class MoviesV2Controller : ControllerBase
     /// <returns> Масив фільмів </returns>
     [HttpGet]
     [ProducesResponseType(typeof(IReadOnlyList<MovieDto>), StatusCodes.Status200OK)]
-    public ActionResult<IReadOnlyList<MovieDto>> GetAll([FromQuery] string? genre)
+    public async Task<ActionResult<IReadOnlyList<MovieDto>>> GetAll([FromQuery] string? genre)
     {
-        var movies = _movieService.GetAll(genre);
+        var movies = await _movieService.GetAllAsync(genre);
         return Ok(movies);
     }
 

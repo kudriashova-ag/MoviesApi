@@ -25,25 +25,27 @@ public class InMemoryMovieService : IMovieService
         new() { Id = 5, Title = "Interstellar", ReleaseYear = 2014, Genre = "Фантастика", Rating = 8.7, CreatedAtUtc = DateTime.UtcNow }
     ];
 
-    public IReadOnlyList<MovieDto> GetAll(string? genre)
+    public Task<IReadOnlyList<MovieDto>> GetAllAsync(string? genre)
     {
-        if(!string.IsNullOrWhiteSpace(genre))
+        if (!string.IsNullOrWhiteSpace(genre))
         {
-            return Movies.Where(m => m.Genre.Equals(genre.Trim(), StringComparison.OrdinalIgnoreCase))
+            IReadOnlyList<MovieDto> result1 = Movies.Where(m => m.Genre.Equals(genre.Trim(), StringComparison.OrdinalIgnoreCase))
                 .Select(m => _mapper.Map<MovieDto>(m)).ToList();
+            return Task.FromResult(result1);
         }
-        return Movies.Select(m => _mapper.Map<MovieDto>(m)).ToList();
+        IReadOnlyList<MovieDto> result = Movies.Select(m => _mapper.Map<MovieDto>(m)).ToList();
+        return Task.FromResult(result);
     }
 
 
-    public MovieDto? GetById(int id) {
+    public Task<MovieDto?> GetByIdAsync(int id) {
         var movie = Movies.FirstOrDefault(m => m.Id == id);
-        return movie is null ? null : _mapper.Map<MovieDto>(movie);
+        return Task.FromResult(movie is null ? null : _mapper.Map<MovieDto>(movie));
     }
 
 
 
-    public MovieDto Create(CreateMovieDto dto)
+    public Task<MovieDto> CreateAsync(CreateMovieDto dto)
     {
         lock (Sync) // використовувати, поки не  перейшли на БД
         {
@@ -52,32 +54,32 @@ public class InMemoryMovieService : IMovieService
             movie.CreatedAtUtc = DateTime.UtcNow;
 
             Movies.Add(movie);
-            return _mapper.Map<MovieDto>(movie);
+            return Task.FromResult(_mapper.Map<MovieDto>(movie));
         }
     }
 
-    public bool Delete(int id)
+    public Task<bool> DeleteAsync(int id)
     {
         lock (Sync)
         {
-            return Movies.RemoveAll(m => m.Id == id) > 0;
+            return Task.FromResult(Movies.RemoveAll(m => m.Id == id) > 0);
         }
     }
 
 
 
-    public bool Update(int id, UpdateMovieDto dto)
+    public Task<bool> UpdateAsync(int id, UpdateMovieDto dto)
     {
         lock (Sync)
         {
             var movie = Movies.FirstOrDefault(m => m.Id == id);
             if (movie is null)
             {
-                return false;
+                return Task.FromResult(false);
             }
 
             _mapper.Map(dto, movie);
-            return true;
+            return Task.FromResult(true);
         }
     }
 

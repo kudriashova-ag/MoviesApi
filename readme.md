@@ -41,6 +41,9 @@ dotnet ef database update
 Список міграцій:
 dotnet ef migrations list
 
+Видалення бази даних
+dotnet ef database drop --force
+
 Створити нову таблицю:
 
 1. Створити нову сутність в Domain
