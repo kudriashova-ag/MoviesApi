@@ -49,7 +49,7 @@ builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlServer(conn
 
 
 
-builder.Services.AddSingleton<IMovieService, InMemoryMovieService>();
+builder.Services.AddScoped<IMovieService, EfMovieService>();
 
 
 
