@@ -1,6 +1,7 @@
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
+using MoviesApi.Application.Common;
 using MoviesApi.Application.Movies;
 using MoviesApi.Application.Movies.Dtos;
 using MoviesApi.Domain.Movies;
@@ -20,12 +21,12 @@ public class EfMovieService : IMovieService
         _mapper = mapper;
     }
 
-    public async Task<IReadOnlyList<MovieDto>> GetAllAsync(string? genre)
+    public async Task<PagedResult<MovieDto>> GetAllAsync(MovieQueryParameters parameters)
     {
         return await _db.Movies
             .OrderBy(m => m.Id)
             .ProjectTo<MovieDto>(_mapper.ConfigurationProvider)
-            .ToListAsync();
+            .ToPagedResultAsync(parameters.Page, parameters.PageSize);
     }
 
     public async Task<MovieDto?> GetByIdAsync(int id)

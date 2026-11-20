@@ -20,13 +20,13 @@ public class MoviesController : ControllerBase
     /// <summary>
     /// Повертає всі фільми
     /// </summary>
-    /// <param name="genre"> Жанр фільму </param>
+    /// <param name="parameters"> Параметри запиту </param>
     /// <returns> Масив фільмів </returns>
     [HttpGet]
     [ProducesResponseType(typeof(IReadOnlyList<MovieDto>), StatusCodes.Status200OK)]
-    public async Task<ActionResult<IReadOnlyList<MovieDto>>> GetAll([FromQuery] string? genre)
+    public async Task<ActionResult<IReadOnlyList<MovieDto>>> GetAll([FromQuery] MovieQueryParameters parameters)
     {
-        var movies = await _movieService.GetAllAsync(genre);
+        var movies = await _movieService.GetAllAsync(parameters);
         return Ok(movies);
     }
 

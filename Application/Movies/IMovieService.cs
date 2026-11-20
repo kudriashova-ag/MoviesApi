@@ -1,3 +1,4 @@
+using MoviesApi.Application.Common;
 using MoviesApi.Application.Movies.Dtos;
 
 namespace MoviesApi.Application.Movies;
@@ -5,7 +6,7 @@ namespace MoviesApi.Application.Movies;
 //  Описує ЩО вміє робити програма з фільмами, але не ЯК
 public interface IMovieService
 {
-    Task<IReadOnlyList<MovieDto>> GetAllAsync(string? genre);
+    Task<PagedResult<MovieDto>> GetAllAsync(MovieQueryParameters parameters);
 
     Task<MovieDto?> GetByIdAsync(int id);
 

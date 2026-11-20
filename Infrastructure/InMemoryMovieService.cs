@@ -5,7 +5,7 @@ using MoviesApi.Domain.Movies;
 
 namespace MoviesApi.Infrastructure;
 
-public class InMemoryMovieService : IMovieService
+public class InMemoryMovieService 
 {
     private static readonly Lock Sync = new();
 
