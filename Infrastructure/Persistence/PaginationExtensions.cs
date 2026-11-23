@@ -11,7 +11,7 @@ public static class PaginationExtensions
         int pageSize
     )
     {
-        var totalCount = await query.CountAsync();
+        var totalCount = await query.CountAsync(); // SELECT COUNT(*) From ...
 
         var items = await query
             .Skip((page - 1) * pageSize)

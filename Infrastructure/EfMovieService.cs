@@ -24,9 +24,10 @@ public class EfMovieService : IMovieService
     public async Task<PagedResult<MovieDto>> GetAllAsync(MovieQueryParameters parameters)
     {
         return await _db.Movies
-            .OrderBy(m => m.Id)
-            .ProjectTo<MovieDto>(_mapper.ConfigurationProvider)
-            .ToPagedResultAsync(parameters.Page, parameters.PageSize);
+            .ApplyFilters(parameters) // WHERE ...
+            .ApplySorting(parameters.Sort) // ORDER BY ...
+            .ProjectTo<MovieDto>(_mapper.ConfigurationProvider) // SELECT потрібних стовбців
+            .ToPagedResultAsync(parameters.Page, parameters.PageSize); // COUNT + OFFSET + виконується весь запит
     }
 
     public async Task<MovieDto?> GetByIdAsync(int id)
