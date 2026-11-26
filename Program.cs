@@ -5,6 +5,8 @@ using MoviesApi.Application.Movies;
 using MoviesApi.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using MoviesApi.Infrastructure.Persistence;
+using MoviesApi.Application.Files;
+using MoviesApi.Infrastructure.Files;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -51,6 +53,9 @@ builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlServer(conn
 
 builder.Services.AddScoped<IMovieService, EfMovieService>();
 
+var publicRoot = Path.Combine(builder.Environment.WebRootPath, "uploads"); // "wwwroot/uploads"
+var privateRoot = Path.Combine(builder.Environment.ContentRootPath, "storage"); // "storage"
+builder.Services.AddSingleton<IFileStorageService>(new LocalFileStorageService(publicRoot, privateRoot));
 
 
 
@@ -96,7 +101,7 @@ app.Use(async (context, next) =>
         stopwatch.ElapsedMilliseconds);
 });
 
-
+app.UseStaticFiles();
 app.MapControllers();
 
 

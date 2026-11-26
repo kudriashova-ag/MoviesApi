@@ -20,6 +20,12 @@ public class MovieConfiguration : IEntityTypeConfiguration<Movie>
             .IsRequired()
             .HasMaxLength(50);
 
+        builder.Property(m => m.PosterPath)
+            .HasMaxLength(200);
+
+        builder.Property(m => m.ScriptPath)
+            .HasMaxLength(200);
+
 
         builder.HasData(
            new Movie { Id = 1, Title = "Inception", ReleaseYear = 2010, Genre = "Sci-Fi" },

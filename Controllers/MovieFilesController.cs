@@ -1,5 +1,4 @@
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
 using MoviesApi.Application.Files;
 
 namespace MoviesApi.Controllers;
@@ -11,6 +10,13 @@ public class MovieFilesController : ControllerBase
     private const long PosterRequestLimit = 3 * 1024 * 1024;
     private const long ScriptRequestLimit = 11 * 1024 * 1024;
 
+
+    private readonly IFileStorageService _storage;
+
+    public MovieFilesController(IFileStorageService storage)
+    {
+        _storage = storage;
+    }
 
 
     [HttpPut("poster")]
@@ -28,15 +34,13 @@ public class MovieFilesController : ControllerBase
             return ValidationProblem(ModelState);
         }
 
-
+        var extension = Path.GetExtension(file.FileName).ToLowerInvariant();
+        var path = await _storage.SaveAsync(content, "poster", extension, StorageZone.Public);
 
 
         return Ok(new
         {
-            file.Name,
-            file.FileName,
-            file.ContentType,
-            file.Length
+            path
         });
     }
 }

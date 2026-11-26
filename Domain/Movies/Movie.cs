@@ -10,4 +10,7 @@ public class Movie
     public double Rating { get; set; }
 
     public DateTime CreatedAtUtc { get; set; }
+
+    public string? PosterPath { get; set; } = string.Empty;
+    public string? ScriptPath { get; set; } = string.Empty; // шлях до сценарію
 }

@@ -38,11 +38,19 @@ namespace MoviesApi.Infrastructure.Persistence.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
+                    b.Property<string>("PosterPath")
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
                     b.Property<double>("Rating")
                         .HasColumnType("float");
 
                     b.Property<int>("ReleaseYear")
                         .HasColumnType("int");
+
+                    b.Property<string>("ScriptPath")
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
 
                     b.Property<string>("Title")
                         .IsRequired()
@@ -59,8 +67,10 @@ namespace MoviesApi.Infrastructure.Persistence.Migrations
                             Id = 1,
                             CreatedAtUtc = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Genre = "Sci-Fi",
+                            PosterPath = "",
                             Rating = 0.0,
                             ReleaseYear = 2010,
+                            ScriptPath = "",
                             Title = "Inception"
                         },
                         new
@@ -68,8 +78,10 @@ namespace MoviesApi.Infrastructure.Persistence.Migrations
                             Id = 2,
                             CreatedAtUtc = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Genre = "Action",
+                            PosterPath = "",
                             Rating = 0.0,
                             ReleaseYear = 2008,
+                            ScriptPath = "",
                             Title = "The Dark Knight"
                         },
                         new
@@ -77,8 +89,10 @@ namespace MoviesApi.Infrastructure.Persistence.Migrations
                             Id = 3,
                             CreatedAtUtc = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Genre = "Sci-Fi",
+                            PosterPath = "",
                             Rating = 0.0,
                             ReleaseYear = 2014,
+                            ScriptPath = "",
                             Title = "Interstellar"
                         },
                         new
@@ -86,8 +100,10 @@ namespace MoviesApi.Infrastructure.Persistence.Migrations
                             Id = 4,
                             CreatedAtUtc = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Genre = "Thriller",
+                            PosterPath = "",
                             Rating = 0.0,
                             ReleaseYear = 2019,
+                            ScriptPath = "",
                             Title = "Parasite"
                         },
                         new
@@ -95,8 +111,10 @@ namespace MoviesApi.Infrastructure.Persistence.Migrations
                             Id = 5,
                             CreatedAtUtc = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Genre = "Drama",
+                            PosterPath = "",
                             Rating = 0.0,
                             ReleaseYear = 1994,
+                            ScriptPath = "",
                             Title = "The Shawshank Redemption"
                         });
                 });
