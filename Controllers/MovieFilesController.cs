@@ -26,17 +26,19 @@ public class MovieFilesController : ControllerBase
     {
         await using var content = file.OpenReadStream();
         var upload = new UploadedFile(content, file.FileName, file.Length);
-
+        // Валідація зображення
         var error = await FileValidator.ValidateAsync(upload, FileRules.Poster);
         if (error is not null)
         {
             ModelState.AddModelError(nameof(file), error);
             return ValidationProblem(ModelState);
         }
-
+        // збереження зображення
         var extension = Path.GetExtension(file.FileName).ToLowerInvariant();
         var path = await _storage.SaveAsync(content, "poster", extension, StorageZone.Public);
 
+        // зберегти path в БД
+        
 
         return Ok(new
         {
